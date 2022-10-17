@@ -248,7 +248,10 @@ class LayoutEntry {
         if (postFormatter != null) {
             fieldEntry = postFormatter.format(fieldEntry);
         }
-
+        //Only allow ascii characters
+        fieldEntry = fieldEntry.replaceAll("[^\\p{ASCII}]", "");
+        //Find only cases of single quotes and replace with double quotes
+        fieldEntry = fieldEntry.replaceAll("(?<!\")\"(?!\")","\"\"");
         return fieldEntry;
     }
 
