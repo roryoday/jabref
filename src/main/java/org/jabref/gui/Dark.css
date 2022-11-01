@@ -18,6 +18,7 @@
     -jr-light-purple: #d927a8;
     -jr-yellow: #b5b021;
     -jr-orange: #b77620;
+    -jr-cyan: #3aafd9;
 
     -jr-base: #141824;
 
@@ -68,7 +69,7 @@
 }
 
 .addition {
-    -rtfx-background-color: -jr-green;
+    -rtfx-background-color: -jr-cyan;
 }
 
 .deletion {
