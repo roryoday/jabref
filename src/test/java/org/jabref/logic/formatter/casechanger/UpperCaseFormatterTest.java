@@ -38,4 +38,9 @@ public class UpperCaseFormatterTest {
     public void formatExample() {
         assertEquals("KDE {Amarok}", formatter.format(formatter.getExampleInput()));
     }
+
+    @Test
+    public void getNameExample(){
+        assertEquals("UPPER CASE", formatter.getName());
+    }
 }

@@ -41,4 +41,9 @@ public class LowerCaseFormatterTest {
     public void formatExample() {
         assertEquals("kde {Amarok}", formatter.format(formatter.getExampleInput()));
     }
+
+    @Test
+    public void getNameExample(){
+        assertEquals("lower case", formatter.getName());
+    }
 }

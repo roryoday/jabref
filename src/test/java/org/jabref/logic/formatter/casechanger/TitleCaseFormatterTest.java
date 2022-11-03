@@ -66,6 +66,12 @@ public class TitleCaseFormatterTest {
     @ParameterizedTest
     @MethodSource("testData")
     public void test(String expected, String input) {
-        assertEquals(expected, formatter.format(input));
+        assertEquals(expected, formatter.format(input)); 
     }
+
+    @Test
+    public void getNameExample(){
+        assertEquals("Title Case", formatter.getName());
+    }
+
 }
