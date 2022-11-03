@@ -249,6 +249,9 @@ class LayoutEntry {
             fieldEntry = postFormatter.format(fieldEntry);
         }
 
+        //Find only cases of single quotes and replace with double quotes
+        fieldEntry = fieldEntry.replaceAll("(?<!\")\"(?!\")","\"\"");
+
         return fieldEntry;
     }
 
