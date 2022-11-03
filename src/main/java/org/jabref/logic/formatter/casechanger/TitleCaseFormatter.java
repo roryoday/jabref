@@ -10,7 +10,7 @@ public class TitleCaseFormatter extends Formatter {
 
     @Override
     public String getName() {
-        return Localization.lang("Title case");
+        return Localization.lang("Title Case");
     }
 
     @Override
