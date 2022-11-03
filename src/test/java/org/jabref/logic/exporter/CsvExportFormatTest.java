@@ -126,7 +126,7 @@ public class CsvExportFormatTest {
 
         BibEntry entry = new BibEntry();
 
-        entry.setField(StandardField.TITLE, "\"test1,\",\"test2,\"");
+        entry.setField(StandardField.TITLE, "\"test1,\",\"test2,\"\"");
 
         List<BibEntry> entries = Arrays.asList(entry);
 
@@ -135,7 +135,7 @@ public class CsvExportFormatTest {
         List<String> lines = Files.readAllLines(path);
         assertEquals(2, lines.size());
         assertEquals(
-                "10,\"\",\"\",\"\",\"\"\"test1,\"\",\"\"test2,\"\"\",\"\",,,\"\",\"\",,\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"",
+                "10,\"\",\"\",\"\",\"\"\"test1,\"\",\"\"test2,\"\"\"\",\"\",,,\"\",\"\",,\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"",
                 lines.get(1));
     }
 
