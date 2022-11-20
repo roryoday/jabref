@@ -225,10 +225,8 @@ public class FieldNameLabel extends Label {
             }
         } else if (field instanceof InternalField) {
             InternalField internalField = (InternalField) field;
-            switch (internalField) {
-                case KEY_FIELD:
-                    return Localization.lang("Key by which the work may be cited.");
-            }
+            if (internalField == InternalField.KEY_FIELD)
+                return Localization.lang("Key by which the work may be cited.");
         } else if (field instanceof SpecialField) {
             SpecialField specialField = (SpecialField) field;
             switch (specialField) {
