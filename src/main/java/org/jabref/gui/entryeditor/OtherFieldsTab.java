@@ -75,7 +75,7 @@ public class OtherFieldsTab extends FieldsEditorTab {
             otherFields.removeAll(entryType.get().getDeprecatedFields());
             otherFields.removeAll(entryType.get().getOptionalFields().stream().map(BibField::getField).collect(Collectors.toSet()));
             otherFields.remove(InternalField.KEY_FIELD);
-            otherFields.removeAll(customTabFieldNames);
+            customTabFieldNames.forEach(otherFields::remove);
             return otherFields;
         } else {
             // Entry type unknown -> treat all fields as required

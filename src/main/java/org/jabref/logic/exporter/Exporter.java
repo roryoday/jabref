@@ -109,7 +109,7 @@ public abstract class Exporter {
                 if (linkedFile.getFileType().equals(fileType.getName())) {
                     Optional<Path> linkedFilePath = linkedFile.findIn(databaseContext.getFileDirectories(filePreferences));
                     if (!linkedFilePath.isEmpty() && Files.exists(linkedFilePath.get()) && Files.isSameFile(linkedFilePath.get(), filePath)) {
-                        export(databaseContext, filePath, Arrays.asList((entry)));
+                        export(databaseContext, filePath, List.of((entry)));
                         writtenABibEntry = true;
                     }
                 }
