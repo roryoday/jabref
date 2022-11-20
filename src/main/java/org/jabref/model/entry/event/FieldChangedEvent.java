@@ -59,7 +59,7 @@ public class FieldChangedEvent extends EntryChangedEvent {
     }
 
     private int computeMajorCharacterChange(String oldValue, String newValue) {
-        if (oldValue.equals(newValue)) {
+        if (oldValue == newValue) {
             return 0;
         } else if ((oldValue == null) && (newValue != null)) {
             return newValue.length();
