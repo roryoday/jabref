@@ -1,5 +1,7 @@
 package org.jabref.model.entry.event;
 
+import java.util.Objects;
+
 import org.jabref.model.FieldChange;
 import org.jabref.model.entry.BibEntry;
 import org.jabref.model.entry.field.Field;
@@ -59,7 +61,7 @@ public class FieldChangedEvent extends EntryChangedEvent {
     }
 
     private int computeMajorCharacterChange(String oldValue, String newValue) {
-        if (oldValue == newValue) {
+        if (Objects.equals(oldValue, newValue)) {
             return 0;
         } else if ((oldValue == null) && (newValue != null)) {
             return newValue.length();
