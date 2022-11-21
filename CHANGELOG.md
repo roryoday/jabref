@@ -126,6 +126,10 @@ Note that this project **does not** adhere to [Semantic Versioning](http://semve
 - We moved the preferences option "Warn about duplicates on import" option from the tab "File" to the tab "Import and Export". [koppor#570](https://github.com/koppor/jabref/issues/570)
 - When JabRef encounters `% Encoding: UTF-8` header, it is kept during writing (and not removed). [#8964](https://github.com/JabRef/jabref/pull/8964)
 - We replace characters which cannot be decoded using the specified encoding by a (probably another) valid character. This happens if JabRef detects the wrong charset (e.g., UTF-8 instead of Windows 1252). One can use the [Integrity Check](https://docs.jabref.org/finding-sorting-and-cleaning-entries/checkintegrity) to find those characters.
+- We improved memory use in Exporter.java by changing Array.asList() to List.of() in the exportToFileByPath function.
+- We changed .removeAll() in OtherFieldsTab.java to .foreach(::remove) form to guarantee O(n) runtime.
+- We changed unnecessary Integer atSymbolIndex variable to primitive type int to increase performance in the while loop.
+- We changed == operator in to .equals() when comparing strings in FieldChangedEvent.java (== operator compares memory location not the objects).
 
 ### Fixed
 
