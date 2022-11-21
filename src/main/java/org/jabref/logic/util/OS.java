@@ -1,5 +1,7 @@
 package org.jabref.logic.util;
 
+import org.jabref.gui.desktop.os.*;
+
 import java.util.Locale;
 
 /***
@@ -22,5 +24,16 @@ public class OS {
     public static final boolean OS_X = OS_NAME.startsWith("mac");
 
     private OS() {
+    }
+
+    public static NativeDesktop getNativeDesktop() {
+        if (WINDOWS) {
+            return new Windows();
+        } else if (OS_X) {
+            return new OSX();
+        } else if (LINUX) {
+            return new Linux();
+        }
+        return new DefaultDesktop();
     }
 }

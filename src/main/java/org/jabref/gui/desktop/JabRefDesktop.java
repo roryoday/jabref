@@ -12,11 +12,7 @@ import java.util.regex.Pattern;
 
 import org.jabref.gui.DialogService;
 import org.jabref.gui.Globals;
-import org.jabref.gui.desktop.os.DefaultDesktop;
-import org.jabref.gui.desktop.os.Linux;
 import org.jabref.gui.desktop.os.NativeDesktop;
-import org.jabref.gui.desktop.os.OSX;
-import org.jabref.gui.desktop.os.Windows;
 import org.jabref.gui.externalfiletype.ExternalFileType;
 import org.jabref.gui.externalfiletype.ExternalFileTypes;
 import org.jabref.logic.importer.util.IdentifierParser;
@@ -41,7 +37,7 @@ public class JabRefDesktop {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JabRefDesktop.class);
 
-    private static final NativeDesktop NATIVE_DESKTOP = getNativeDesktop();
+    private static final NativeDesktop NATIVE_DESKTOP = OS.getNativeDesktop();
     private static final Pattern REMOTE_LINK_PATTERN = Pattern.compile("[a-z]+://.*");
 
     private JabRefDesktop() {
@@ -288,15 +284,4 @@ public class JabRefDesktop {
         }
     }
 
-    // TODO: Move to OS.java
-    public static NativeDesktop getNativeDesktop() {
-        if (OS.WINDOWS) {
-            return new Windows();
-        } else if (OS.OS_X) {
-            return new OSX();
-        } else if (OS.LINUX) {
-            return new Linux();
-        }
-        return new DefaultDesktop();
-    }
 }
