@@ -1,11 +1,6 @@
 package org.jabref.logic.importer.fetcher;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.StringJoiner;
+import java.util.*;
 
 import org.jabref.model.strings.StringUtil;
 
@@ -108,16 +103,16 @@ public class ComplexSearchQuery {
         ComplexSearchQuery that = (ComplexSearchQuery) o;
 
         // Just check for set equality, order does not matter
-        if (!(getDefaultFieldPhrases().containsAll(that.getDefaultFieldPhrases()) && that.getDefaultFieldPhrases().containsAll(getDefaultFieldPhrases()))) {
+        if (!(new HashSet<>(getDefaultFieldPhrases()).containsAll(that.defaultField) && new HashSet<>(that.getDefaultFieldPhrases()).containsAll(defaultField))) {
             return false;
         }
-        if (!(getAuthors().containsAll(that.getAuthors()) && that.getAuthors().containsAll(getAuthors()))) {
+        if (!(new HashSet<>(getAuthors()).containsAll(that.authors) && new HashSet<>(that.getAuthors()).containsAll(authors))) {
             return false;
         }
-        if (!(getTitlePhrases().containsAll(that.getTitlePhrases()) && that.getTitlePhrases().containsAll(getTitlePhrases()))) {
+        if (!(new HashSet<>(getTitlePhrases()).containsAll(that.titlePhrases) && new HashSet<>(that.getTitlePhrases()).containsAll(titlePhrases))) {
             return false;
         }
-        if (!(getAbstractPhrases().containsAll(that.getAbstractPhrases()) && that.getAbstractPhrases().containsAll(getAbstractPhrases()))) {
+        if (!(new HashSet<>(getAbstractPhrases()).containsAll(that.abstractPhrases) && new HashSet<>(that.getAbstractPhrases()).containsAll(abstractPhrases))) {
             return false;
         }
         if (getFromYear().isPresent() ? !getFromYear().equals(that.getFromYear()) : that.getFromYear().isPresent()) {
@@ -137,7 +132,7 @@ public class ComplexSearchQuery {
 
     @Override
     public int hashCode() {
-        return Objects.hash(defaultField, getAuthors(), getSingleYear(), getAbstractPhrases(), getFromYear(), getToYear(), getTitlePhrases(), getJournal(), getDOI());
+        return Objects.hash(defaultField, authors, getSingleYear(), abstractPhrases, getFromYear(), getToYear(), titlePhrases, getJournal(), getDOI());
     }
 
     @Override
@@ -149,10 +144,10 @@ public class ComplexSearchQuery {
         getToYear().ifPresent(toYear -> stringJoiner.add(toYear.toString()));
         getJournal().ifPresent(stringJoiner::add);
         getDOI().ifPresent(newElement -> stringJoiner.add("doi:" + newElement));
-        stringJoiner.add(String.join(" ", getTitlePhrases()))
-                    .add(String.join(" ", getDefaultFieldPhrases()))
-                    .add(String.join(" ", getAuthors()))
-                    .add(String.join(" ", getAbstractPhrases()));
+        stringJoiner.add(String.join(" ", titlePhrases))
+                .add(String.join(" ", defaultField))
+                .add(String.join(" ", authors))
+                .add(String.join(" ", abstractPhrases));
 
         return stringJoiner.toString();
     }
