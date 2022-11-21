@@ -99,8 +99,6 @@ public class DiffHighlighting {
                         offset++;
                     }
                     break;
-                case INSERT:
-                    break;
                 default:
                     break;
             }
