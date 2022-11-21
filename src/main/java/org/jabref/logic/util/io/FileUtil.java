@@ -210,7 +210,14 @@ public class FileUtil {
      * @return True if rename was successful, false if an exception occurred
      */
     public static boolean renameFile(Path fromFile, Path toFile) {
-        return renameFile(fromFile, toFile, false);
+        try {
+            Files.move(fromFile, toFile);
+            return true;
+        }
+        catch (IOException e) {
+            LOGGER.error("Renaming Files failed", e);
+            return false;
+        }
     }
 
     /**
