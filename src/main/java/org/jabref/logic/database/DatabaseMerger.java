@@ -2,7 +2,6 @@ package org.jabref.logic.database;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.jabref.model.database.BibDatabase;
@@ -14,7 +13,6 @@ import org.jabref.model.entry.BibtexString;
 import org.jabref.model.groups.AllEntriesGroup;
 import org.jabref.model.groups.ExplicitGroup;
 import org.jabref.model.groups.GroupHierarchyType;
-import org.jabref.model.groups.GroupTreeNode;
 import org.jabref.model.metadata.ContentSelector;
 import org.jabref.model.metadata.MetaData;
 
@@ -121,7 +119,7 @@ public class DatabaseMerger {
                             "Imported " + newGroupName,
                             GroupHierarchyType.INDEPENDENT,
                             keywordDelimiter);
-                    newGroups.setGroup(group,false,false,allOtherEntries);
+                    newGroups.setGroup(group);
                     group.add(allOtherEntries);
                 } catch (IllegalArgumentException e) {
                     LOGGER.error("Problem appending entries to group", e);
@@ -133,8 +131,6 @@ public class DatabaseMerger {
                     () -> target.setGroups(newGroups));
         });
     }
-
-
 
     private void mergeContentSelectors(MetaData target, MetaData other) {
         for (ContentSelector selector : other.getContentSelectorList()) {
