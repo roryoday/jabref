@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.jabref.logic.bibtex.comparator.BibtexStringComparator;
 import org.jabref.logic.importer.ImportFormatPreferences;
+import org.jabref.logic.importer.fileformat.endnote.Abstract;
 import org.jabref.model.database.BibDatabase;
 import org.jabref.model.entry.BibEntry;
 import org.jabref.model.entry.BibtexString;
@@ -190,6 +191,35 @@ class DatabaseMergerTest {
         assertEquals(expectedContentSelectors, target.getContentSelectorList());
     }
 
+    @Test
+    void mergeMetaDataMultipleGroups() {
+        MetaData target = new MetaData();
+        target.addContentSelector(new ContentSelector(StandardField.AUTHOR, List.of("Test Author")));
+        GroupTreeNode targetRootGroup = new GroupTreeNode(new AllEntriesGroup("targetGroup"));
+        ExplicitGroup targetGroupChild = new ExplicitGroup("myExplicitGroup", GroupHierarchyType.INDEPENDENT, ',');
+        targetRootGroup.addSubgroup(targetGroupChild);
+
+        target.setGroups(targetRootGroup);
+        MetaData other = new MetaData();
+        GroupTreeNode otherRootGroup = new GroupTreeNode(new AllEntriesGroup("otherGroup"));
+        ExplicitGroup otherGroupChild = new ExplicitGroup("myExplicitGroup2", GroupHierarchyType.INCLUDING, ',');
+        otherRootGroup.addSubgroup(otherGroupChild);
+        other.setGroups(otherRootGroup);
+        other.addContentSelector(new ContentSelector(StandardField.TITLE, List.of("Test Title")));
+        List<ContentSelector> expectedContentSelectors =
+                List.of(new ContentSelector(StandardField.AUTHOR, List.of("Test Author")),
+                        new ContentSelector(StandardField.TITLE, List.of("Test Title")),
+                        new ContentSelector(StandardField.GROUPS, "myExplicitGroup2"));
+        GroupTreeNode expectedImportedGroupNode = new GroupTreeNode(new ExplicitGroup("Imported unknown", GroupHierarchyType.INDEPENDENT, ';'));
+
+        new DatabaseMerger(importFormatPreferences.getKeywordSeparator()).mergeMetaData(target, other, "unknown", List.of());
+
+        // Assert that groups of other are children of root node of target
+        assertEquals(targetRootGroup, target.getGroups().get());
+        assertEquals(target.getGroups().get().getChildren().size(), 2);
+        assertEquals(expectedImportedGroupNode, target.getGroups().get().getChildren().get(0));
+        assertEquals(expectedContentSelectors, target.getContentSelectorList());
+    }
     static class TestGroup extends AbstractGroup {
 
         protected TestGroup(String name, GroupHierarchyType context) {
