@@ -16,10 +16,8 @@ import org.jabref.gui.util.DefaultTaskExecutor;
 import org.jabref.gui.util.TaskExecutor;
 import org.jabref.logic.JabRefException;
 import org.jabref.logic.database.DatabaseMerger;
-import org.jabref.logic.importer.ImportException;
-import org.jabref.logic.importer.ImportFormatReader;
-import org.jabref.logic.importer.Importer;
-import org.jabref.logic.importer.ParserResult;
+import org.jabref.logic.importer.*;
+import org.jabref.logic.importer.fileformat.BibtexImporter;
 import org.jabref.logic.importer.fileformat.PdfGrobidImporter;
 import org.jabref.logic.importer.fileformat.PdfMergeMetadataImporter;
 import org.jabref.logic.l10n.Localization;
@@ -67,7 +65,8 @@ public class ImportAction {
             // have found
             // one or more bibtex results, it's best to gather them in a
             // BibDatabase.
-            ParserResult bibtexResult = mergeImportResults(imports);
+            ImportMerger merger = new ImportMerger(prefs);
+            ParserResult bibtexResult = merger.mergeImportResults(imports);
 
             // TODO: show parserwarnings, if any (not here)
             // for (ImportFormatReader.UnknownFormatImport p : imports) {
@@ -157,34 +156,5 @@ public class ImportAction {
         return imports;
     }
 
-    /**
-     * TODO: Move this to logic package. Blocked by undo functionality.
-     */
-    private ParserResult mergeImportResults(List<ImportFormatReader.UnknownFormatImport> imports) {
-        BibDatabase resultDatabase = new BibDatabase();
-        ParserResult result = new ParserResult(resultDatabase);
 
-        for (ImportFormatReader.UnknownFormatImport importResult : imports) {
-            if (importResult == null) {
-                continue;
-            }
-            ParserResult parserResult = importResult.parserResult;
-            resultDatabase.insertEntries(parserResult.getDatabase().getEntries());
-
-            if (ImportFormatReader.BIBTEX_FORMAT.equals(importResult.format)) {
-                // additional treatment of BibTeX
-                new DatabaseMerger(prefs.getKeywordDelimiter()).mergeMetaData(
-                        result.getMetaData(),
-                        parserResult.getMetaData(),
-                        importResult.parserResult.getPath().map(path -> path.getFileName().toString()).orElse("unknown"),
-                        parserResult.getDatabase().getEntries());
-            }
-            // TODO: collect errors into ParserResult, because they are currently ignored (see caller of this method)
-        }
-
-        // set timestamp and owner
-        UpdateField.setAutomaticFields(resultDatabase.getEntries(), prefs.getOwnerPreferences(), prefs.getTimestampPreferences()); // set timestamp and owner
-
-        return result;
-    }
 }
