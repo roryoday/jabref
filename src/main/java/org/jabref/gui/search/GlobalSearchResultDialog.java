@@ -61,8 +61,6 @@ public class GlobalSearchResultDialog extends BaseDialog<Void> {
         resultsTable.getSelectionModel().selectedItemProperty().addListener((obs, old, newValue) -> {
             if (newValue != null) {
                 previewViewer.setEntry(newValue.getEntry());
-            } else {
-                previewViewer.setEntry(old.getEntry());
             }
         });
 
