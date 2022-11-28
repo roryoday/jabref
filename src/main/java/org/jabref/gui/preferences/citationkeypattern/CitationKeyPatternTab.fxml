@@ -40,15 +40,21 @@
 
     <Label text="%Replace (regular expression)"/>
     <HBox spacing="4.0" alignment="CENTER">
+        <padding>
+            <Insets right="15.0"> </Insets>
+        </padding>
         <TextField fx:id="keyPatternRegex" HBox.hgrow="ALWAYS"/>
         <Label text="%by"/>
         <TextField fx:id="keyPatternReplacement" HBox.hgrow="ALWAYS"/>
         <padding>
-            <Insets left="20.0"/>
+            <Insets right="15.0" left="20.0"/>
         </padding>
     </HBox>
 
     <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <padding>
+            <Insets right="15.0"> </Insets>
+        </padding>
         <Label text="%Remove the following characters:"/>
         <TextField fx:id="unwantedCharacters" HBox.hgrow="ALWAYS"/>
     </HBox>
@@ -60,6 +66,9 @@
     </HBox>
     <Label text="%( Note: Press return to commit changes in the table! )"/>
     <AnchorPane>
+        <padding>
+            <Insets right="15.0"> </Insets>
+        </padding>
         <CitationKeyPatternPanel fx:id="bibtexKeyPatternTable" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" prefHeight="180.0"/>
         <Button text="%Reset All" onAction="#resetAllKeyPatterns" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
     </AnchorPane>
