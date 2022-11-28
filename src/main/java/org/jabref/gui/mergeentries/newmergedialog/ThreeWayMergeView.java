@@ -3,6 +3,8 @@ package org.jabref.gui.mergeentries.newmergedialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.collections.FXCollections;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -12,12 +14,17 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 
 import org.jabref.gui.Globals;
+import org.jabref.gui.mergeentries.DiffMode;
 import org.jabref.gui.mergeentries.newmergedialog.fieldsmerger.FieldMergerFactory;
 import org.jabref.gui.mergeentries.newmergedialog.toolbar.ThreeWayMergeToolbar;
+import org.jabref.gui.util.ViewModelListCellFactory;
 import org.jabref.logic.l10n.Localization;
 import org.jabref.model.entry.BibEntry;
 import org.jabref.model.entry.field.Field;
 import org.jabref.model.entry.field.FieldProperty;
+import org.jabref.preferences.PreferencesService;
+
+import com.tobiasdiez.easybind.EasyBind;
 
 public class ThreeWayMergeView extends VBox {
     public static final int GRID_COLUMN_MIN_WIDTH = 250;
@@ -38,13 +45,16 @@ public class ThreeWayMergeView extends VBox {
     private final List<FieldRowView> fieldRows = new ArrayList<>();
 
     private final FieldMergerFactory fieldMergerFactory;
+    private ComboBox<DiffMode> diffMode;
+    private final PreferencesService preferences;
 
-    public ThreeWayMergeView(BibEntry leftEntry, BibEntry rightEntry, String leftHeader, String rightHeader) {
+
+
+    public ThreeWayMergeView(BibEntry leftEntry, BibEntry rightEntry, String leftHeader, String rightHeader, PreferencesService preferences) {
         getStylesheets().add(ThreeWayMergeView.class.getResource("ThreeWayMergeView.css").toExternalForm());
         viewModel = new ThreeWayMergeViewModel((BibEntry) leftEntry.clone(), (BibEntry) rightEntry.clone(), leftHeader, rightHeader);
-        // TODO: Inject 'preferenceService' into the constructor
         this.fieldMergerFactory = new FieldMergerFactory(Globals.prefs);
-
+        this.preferences = preferences;
         mergeGridPane = new GridPane();
         scrollPane = new ScrollPane();
         headerView = new ThreeWayMergeHeaderView(leftHeader, rightHeader);
@@ -62,8 +72,8 @@ public class ThreeWayMergeView extends VBox {
         getChildren().addAll(toolbar, headerView, scrollPane);
     }
 
-    public ThreeWayMergeView(BibEntry leftEntry, BibEntry rightEntry) {
-        this(leftEntry, rightEntry, LEFT_DEFAULT_HEADER, RIGHT_DEFAULT_HEADER);
+    public ThreeWayMergeView(BibEntry leftEntry, BibEntry rightEntry, PreferencesService preferences) {
+        this(leftEntry, rightEntry, LEFT_DEFAULT_HEADER, RIGHT_DEFAULT_HEADER, preferences);
     }
 
     private void initializeToolbar() {
@@ -78,6 +88,15 @@ public class ThreeWayMergeView extends VBox {
     private void updateDiff() {
         if (toolbar.isShowDiffEnabled()) {
             fieldRows.forEach(row -> row.showDiff(new ShowDiffConfig(toolbar.getDiffView(), toolbar.getDiffHighlightingMethod())));
+            diffMode.setItems(FXCollections.observableList(List.of(
+                    DiffMode.PLAIN,
+                    DiffMode.WORD,
+                    DiffMode.CHARACTER)));
+            new ViewModelListCellFactory<DiffMode>()
+                    .withText(DiffMode::getDisplayText)
+                    .install(diffMode);
+            diffMode.setValue(preferences.getGuiPreferences().getMergeDiffMode());
+            EasyBind.subscribe(this.diffMode.valueProperty(), mode -> preferences.getGuiPreferences().setMergeDiffMode(diffMode.getValue()));
         } else {
             fieldRows.forEach(FieldRowView::hideDiff);
         }
